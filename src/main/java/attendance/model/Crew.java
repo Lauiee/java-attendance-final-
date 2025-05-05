@@ -7,9 +7,9 @@ public class Crew {
     private final String nickName;
     private final Attendances attendances;
 
-    public Crew(String nickName, Attendances attendances) {
+    public Crew(String nickName, List<Attendance> attendances) {
         this.nickName = nickName;
-        this.attendances = attendances;
+        this.attendances = new Attendances(attendances);
     }
 
     public String getNickName() {

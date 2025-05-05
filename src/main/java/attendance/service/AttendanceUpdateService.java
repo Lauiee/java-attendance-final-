@@ -4,6 +4,7 @@ import attendance.model.Attendance;
 import attendance.model.Attendances;
 import attendance.model.Crew;
 import attendance.model.Crews;
+import java.util.ArrayList;
 
 // 출석 수정 로직
 public class AttendanceUpdateService {
@@ -14,7 +15,7 @@ public class AttendanceUpdateService {
 
         // 있으면 해당 크루원 인스턴스 반환, 없다면 새로 만들어 인스턴스 반환
         if(findCrew == null){
-            return new Crew(nickName, new Attendances());
+            return new Crew(nickName, new ArrayList<>());
         }
         return findCrew;
     }

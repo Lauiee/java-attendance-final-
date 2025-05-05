@@ -38,5 +38,4 @@ public class InputView {
         System.out.println("언제로 변경하시겠습니까?");
         return Console.readLine();
     }
-
 }

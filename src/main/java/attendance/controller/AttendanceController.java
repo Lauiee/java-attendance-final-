@@ -3,6 +3,7 @@ package attendance.controller;
 import attendance.model.Attendance;
 import attendance.model.Crew;
 import attendance.model.Crews;
+import attendance.model.ExpelTarget;
 import attendance.service.AttendanceCheckService;
 import attendance.service.AttendanceUpdateService;
 import attendance.service.ExpelDangerCheckService;
@@ -62,7 +63,7 @@ public class AttendanceController {
                 continue;
             }
             if (inputFunction.equals("4")) {
-                expelDangerCheck();
+                expelDangerCheck(crews);
             }
         }
     }
@@ -111,7 +112,8 @@ public class AttendanceController {
         outputView.printCheck(attendances, inputNickName);
     }
 
-    private void expelDangerCheck() {
-
+    private void expelDangerCheck(Crews crews) {
+        List<ExpelTarget> expelTargets = expelDangerCheckService.findExpelTargets(crews);
+        outputView.printExpelTargets(expelTargets);
     }
 }

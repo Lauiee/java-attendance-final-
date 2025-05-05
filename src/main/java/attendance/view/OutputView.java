@@ -2,9 +2,12 @@ package attendance.view;
 
 import attendance.model.Attendance;
 import attendance.model.Attendances;
+import attendance.model.ExpelStatus;
+import attendance.model.ExpelTarget;
 import camp.nextstep.edu.missionutils.DateTimes;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -84,5 +87,43 @@ public class OutputView {
             }
             System.out.println("경고 대상자입니다.\n");
         }
+    }
+
+    public void printExpelTargets(List<ExpelTarget> expelTargets){
+        System.out.println("\n제적 위험자 조회 결과");
+
+        Comparator<ExpelTarget> expelTargetComparator = Comparator
+                .comparingInt((ExpelTarget e) -> e.getAbsenceCount() + (e.getLateCount() / 3))
+                .reversed()
+                .thenComparing(ExpelTarget::getNickName);
+
+        List<ExpelTarget> realExpelTarget = expelTargets.stream()
+                .filter(expelTarget -> expelTarget.getExpelStatus()==ExpelStatus.EXPEL)
+                .sorted(expelTargetComparator)
+                .toList();
+
+        for (ExpelTarget target : realExpelTarget) {
+            System.out.printf("- %s: 결석 %d회, 지각 %d회 (제적)", target.getNickName(), target.getAbsenceCount(), target.getLateCount());
+        }
+
+        List<ExpelTarget> interviewTarget = expelTargets.stream()
+                .filter(expelTarget -> expelTarget.getExpelStatus()==ExpelStatus.INTERVIEW)
+                .sorted(expelTargetComparator)
+                .toList();
+
+        for (ExpelTarget target : interviewTarget) {
+            System.out.printf("- %s: 결석 %d회, 지각 %d회 (면담)", target.getNickName(), target.getAbsenceCount(), target.getLateCount());
+        }
+
+        List<ExpelTarget> warningTarget = expelTargets.stream()
+                .filter(expelTarget -> expelTarget.getExpelStatus()==ExpelStatus.WARNING)
+                .sorted(expelTargetComparator)
+                .toList();
+
+        for (ExpelTarget target : warningTarget) {
+            System.out.printf("- %s: 결석 %d회, 지각 %d회 (경고)", target.getNickName(), target.getAbsenceCount(), target.getLateCount());
+        }
+
+        System.out.println();
     }
 }

@@ -6,7 +6,11 @@ import java.util.List;
 
 public class Attendances {
 
-    private final List<Attendance> attendances = new ArrayList<>();
+    private final List<Attendance> attendances;
+
+    public Attendances(List<Attendance> attendances) {
+        this.attendances = attendances;
+    }
 
     public void addAttendance(Attendance attendance){
         this.attendances.add(attendance);
