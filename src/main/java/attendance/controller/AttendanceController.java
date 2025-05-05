@@ -1,7 +1,6 @@
 package attendance.controller;
 
 import attendance.model.Attendance;
-import attendance.model.Attendances;
 import attendance.model.Crew;
 import attendance.model.Crews;
 import attendance.service.AttendanceCheckService;
@@ -50,10 +49,11 @@ public class AttendanceController {
 
             if (inputFunction.equals("1")) {
                 attendanceCheck(crews);
+                // 당일이 주말, 공휴일이면 예외 출력 로직 구현 예정
                 continue;
             }
             if (inputFunction.equals("2")) {
-                attendanceUpdate();
+                attendanceUpdate(crews);
                 continue;
             }
             if (inputFunction.equals("3")) {
@@ -80,7 +80,27 @@ public class AttendanceController {
         outputView.printAttendance(newAttendance);
     }
 
-    private void attendanceUpdate() {
+    private void attendanceUpdate(Crews crews) {
+
+        // 수정 대상의 닉네임 입력 및 해당 닉네임을 가진 크루 탐색
+        String updateCrewNickName = inputView.inputUpdateCrewNickName();
+        Crew targetCrew = attendanceUpdateService.findCrewByNickName(crews, updateCrewNickName);
+
+        // 수정 대상 날짜(일) 입력
+        int updateDay = Integer.parseInt(inputView.inputUpdateDay());
+        // 수정 대상 기록 탐색
+        Attendance targetAttendance = attendanceUpdateService.findAttendance(targetCrew, updateDay);
+        System.out.println("수정 대상 기록 탐색");
+
+        // 수정 시간 입력
+        String updateTime = inputView.inputUpdateTime();
+        // 수정 진행
+        Attendance updatedAttendance = attendanceUpdateService.updateAttendance(targetCrew, targetAttendance, updateTime);
+        System.out.println("수정 진행");
+
+        // 수정 결과 출력
+        outputView.printUpdateResult(targetAttendance, updatedAttendance);
+
 
     }
 

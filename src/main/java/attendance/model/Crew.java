@@ -19,6 +19,16 @@ public class Crew {
         this.attendances.addAttendance(attendance);
     }
 
+    // 출석 기록 변경
+    public Attendance updateAttendance(Attendance attendance, String updateTime){
+        return attendances.updateAttendance(attendance, updateTime);
+    }
+
+    // 출석 기록 탐색
+    public Attendance findAttendance(int updateDay){
+        return attendances.findAttendance(this.nickName, updateDay);
+    }
+
     public boolean isYourNickName(String nickName){
         return this.nickName.equals(nickName);
     }

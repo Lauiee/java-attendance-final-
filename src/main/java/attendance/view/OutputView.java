@@ -1,9 +1,7 @@
 package attendance.view;
 
 import attendance.model.Attendance;
-import attendance.model.Crew;
 import camp.nextstep.edu.missionutils.DateTimes;
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.Locale;
@@ -23,5 +21,18 @@ public class OutputView {
                 newAttendance.getHour(),
                 newAttendance.getMinute(),
                 newAttendance.getAttendanceResult());
+    }
+
+    public void printUpdateResult(Attendance before, Attendance after){
+        System.out.printf("\n%d월 %d일 %s %d:%d (%s) -> %d:%d (%s) 수정 완료!",
+                before.getMonth(),
+                before.getDay(),
+                before.getDayOfWeek(),
+                before.getHour(),
+                before.getMonth(),
+                before.getAttendanceResult(),
+                after.getHour(),
+                after.getMinute(),
+                after.getAttendanceResult());
     }
 }

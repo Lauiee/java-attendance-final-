@@ -7,7 +7,6 @@ import static attendance.model.AttendanceTimeConstants.REMAIN_WEEKDAY_CLASS_STAR
 import static attendance.model.AttendanceTimeConstants.TARDY_LIMIT_TIME;
 
 import camp.nextstep.edu.missionutils.DateTimes;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.Locale;
@@ -30,6 +29,28 @@ public class Attendance {
         this.hour = Integer.parseInt(attendanceTime.substring(0,2));
         this.minute = Integer.parseInt(attendanceTime.substring(3,5));
         this.attendanceResult = getAttendanceResult(dayOfWeek, hour, minute);
+    }
+
+    // 수정용 생성자
+    public Attendance(Attendance beforeAttendance, String afterAttendanceTime)   {
+        this.crewNickName = beforeAttendance.getCrewNickName();
+        this.month = beforeAttendance.getMonth();
+        this.day = beforeAttendance.getDay();
+        this.dayOfWeek = beforeAttendance.getDayOfWeek();
+        this.hour = Integer.parseInt(afterAttendanceTime.substring(0,2));
+        this.minute = Integer.parseInt(afterAttendanceTime.substring(3,5));
+        this.attendanceResult = getAttendanceResult(dayOfWeek, hour, minute);
+    }
+
+    // 복사용 생성자
+    public Attendance(Attendance copyTargetAttendance)   {
+        this.crewNickName = copyTargetAttendance.getCrewNickName();
+        this.month = copyTargetAttendance.getMonth();
+        this.day = copyTargetAttendance.getDay();
+        this.dayOfWeek = copyTargetAttendance.getDayOfWeek();
+        this.hour = copyTargetAttendance.getHour();
+        this.minute = copyTargetAttendance.getMinute();
+        this.attendanceResult = copyTargetAttendance.getAttendanceResult();
     }
 
     private String getAttendanceResult(String dayOfWeek, int hour, int minute) {
