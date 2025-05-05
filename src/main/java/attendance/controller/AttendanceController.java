@@ -9,6 +9,7 @@ import attendance.service.ExpelDangerCheckService;
 import attendance.service.PersonalAttendanceCheckService;
 import attendance.view.InputView;
 import attendance.view.OutputView;
+import java.util.List;
 
 public class AttendanceController {
 
@@ -57,7 +58,7 @@ public class AttendanceController {
                 continue;
             }
             if (inputFunction.equals("3")) {
-                personalAttendancesCheck();
+                personalAttendancesCheck(crews);
                 continue;
             }
             if (inputFunction.equals("4")) {
@@ -90,13 +91,11 @@ public class AttendanceController {
         int updateDay = Integer.parseInt(inputView.inputUpdateDay());
         // 수정 대상 기록 탐색
         Attendance targetAttendance = attendanceUpdateService.findAttendance(targetCrew, updateDay);
-        System.out.println("수정 대상 기록 탐색");
 
         // 수정 시간 입력
         String updateTime = inputView.inputUpdateTime();
         // 수정 진행
         Attendance updatedAttendance = attendanceUpdateService.updateAttendance(targetCrew, targetAttendance, updateTime);
-        System.out.println("수정 진행");
 
         // 수정 결과 출력
         outputView.printUpdateResult(targetAttendance, updatedAttendance);
@@ -104,8 +103,12 @@ public class AttendanceController {
 
     }
 
-    private void personalAttendancesCheck() {
+    private void personalAttendancesCheck(Crews crews) {
+        String inputNickName = inputView.inputNickName();
 
+        List<Attendance> attendances = personalAttendanceCheckService.checkCrewAttendances(crews, inputNickName);
+
+        outputView.printCheck(attendances, inputNickName);
     }
 
     private void expelDangerCheck() {

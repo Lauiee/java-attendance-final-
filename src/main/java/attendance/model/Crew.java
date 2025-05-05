@@ -1,5 +1,7 @@
 package attendance.model;
 
+import java.util.List;
+
 public class Crew {
 
     private final String nickName;
@@ -27,6 +29,11 @@ public class Crew {
     // 출석 기록 탐색
     public Attendance findAttendance(int updateDay){
         return attendances.findAttendance(this.nickName, updateDay);
+    }
+
+    // 전체 출석 기록 조회
+    public List<Attendance> getAttendances(){
+        return attendances.getAttendances();
     }
 
     public boolean isYourNickName(String nickName){

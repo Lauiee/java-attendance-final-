@@ -12,6 +12,12 @@ public class Attendances {
         this.attendances.add(attendance);
     }
 
+    public List<Attendance> getAttendances() {
+        return attendances.stream()
+                .map(attendance -> new Attendance(attendance))
+                .toList();
+    }
+
     // 당일 출석 기록 있다면 true, 없으면 false
     public boolean isAttendToday(){
         for (Attendance attendance : attendances){

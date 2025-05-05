@@ -13,4 +13,8 @@ public class Crews {
         }
         return null;
     }
+
+    public void addCrew(Crew crew){
+        crews.add(crew);
+    }
 }

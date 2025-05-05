@@ -14,7 +14,9 @@ public class AttendanceCheckService {
 
         // 있으면 해당 크루원 인스턴스 반환, 없다면 새로 만들어 인스턴스 반환
         if(findCrew == null){
-            return new Crew(nickName, new Attendances());
+            Crew newCrew = new Crew(nickName, new Attendances());
+            crews.addCrew(newCrew);
+            return newCrew;
         }
         return findCrew;
     }
