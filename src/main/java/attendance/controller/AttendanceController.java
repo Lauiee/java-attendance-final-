@@ -10,7 +10,6 @@ import attendance.service.ExpelDangerCheckService;
 import attendance.service.PersonalAttendanceCheckService;
 import attendance.view.InputView;
 import attendance.view.OutputView;
-import java.io.FileNotFoundException;
 import java.util.List;
 
 public class AttendanceController {
@@ -36,7 +35,7 @@ public class AttendanceController {
         this.personalAttendanceCheckService = personalAttendanceCheckService;
     }
 
-    public void run() throws FileNotFoundException {
+    public void run() {
 
         // csv파일 읽어 미리 Crews 생성
         Crews crews = new Crews();
@@ -53,7 +52,6 @@ public class AttendanceController {
 
             if (inputFunction.equals("1")) {
                 attendanceCheck(crews);
-                // 당일이 주말, 공휴일이면 예외 출력 로직 구현 예정
                 continue;
             }
             if (inputFunction.equals("2")) {
@@ -73,7 +71,7 @@ public class AttendanceController {
     private void attendanceCheck(Crews crews) {
 
         // 닉네임 입력, 현존하는 크루원인지 확인 후 없던 크루원이면 새로 생성
-        String inputNickName = inputView.inputNickName();
+        String inputNickName = inputView.inputNickNameToAttendance();
         Crew attendanceCrew = attendanceCheckService.findOrCreateCrew(crews, inputNickName);
 
         // 출석 시간 입력

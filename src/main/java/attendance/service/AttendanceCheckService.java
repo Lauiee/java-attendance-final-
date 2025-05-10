@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 // 출석 확인 로직
 public class AttendanceCheckService {
@@ -38,17 +39,22 @@ public class AttendanceCheckService {
         return newAttendance;
     }
 
-    public void parseCrewFromCsv(Crews crews) throws FileNotFoundException {
+    public void parseCrewFromCsv(Crews crews) {
         String filePath = "src/main/resources/attendances.csv";
         Map<String, List<String>> records = new HashMap<>();
-        parseRecordsFromCsv(filePath, records);
+
+        try{
+            parseRecordsFromCsv(filePath, records);
+        } catch (FileNotFoundException e){
+            e.printStackTrace();
+        }
 
         for (String crewNickName : records.keySet()) {
             List<String> attendanceRecords = records.get(crewNickName);
 
             List<Attendance> attendances = attendanceRecords.stream()
                     .map(record -> createAttendance(crewNickName, record))
-                    .toList();
+                    .collect(Collectors.toList());
 
             crews.addCrew(new Crew(crewNickName, attendances));
         }
