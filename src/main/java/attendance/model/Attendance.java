@@ -7,6 +7,8 @@ import static attendance.model.AttendanceTimeConstants.REMAIN_WEEKDAY_CLASS_STAR
 import static attendance.model.AttendanceTimeConstants.TARDY_LIMIT_TIME;
 
 import camp.nextstep.edu.missionutils.DateTimes;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.Locale;
@@ -53,6 +55,22 @@ public class Attendance {
         this.attendanceResult = copyTargetAttendance.getAttendanceResult();
     }
 
+    // 과거 기록 생성자
+    public Attendance(String creNickName, String attendanceDate, String attendanceTime){
+        String[] dateSplit = attendanceDate.split("-");
+        int year = Integer.parseInt(dateSplit[0]);
+        int month = Integer.parseInt(dateSplit[1]);
+        int date = Integer.parseInt(dateSplit[2]);
+
+        this.crewNickName = creNickName;
+        this.month = month;
+        this.day = date;
+        this.dayOfWeek = LocalDate.of(year,month,date).getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN);
+        this.hour = Integer.parseInt(attendanceTime.substring(0,2));
+        this.minute = Integer.parseInt(attendanceTime.substring(3,5));
+        this.attendanceResult = getAttendanceResult(dayOfWeek, hour, minute);
+    }
+    
     private String getAttendanceResult(String dayOfWeek, int hour, int minute) {
         LocalDateTime time = LocalDateTime.of(1,1,1,1,1);
         int totalMinute = hour * HOUR_TO_MINUTE.getTime() + minute;

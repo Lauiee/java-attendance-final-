@@ -10,6 +10,7 @@ import attendance.service.ExpelDangerCheckService;
 import attendance.service.PersonalAttendanceCheckService;
 import attendance.view.InputView;
 import attendance.view.OutputView;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public class AttendanceController {
@@ -35,10 +36,11 @@ public class AttendanceController {
         this.personalAttendanceCheckService = personalAttendanceCheckService;
     }
 
-    public void run() {
+    public void run() throws FileNotFoundException {
 
         // csv파일 읽어 미리 Crews 생성
         Crews crews = new Crews();
+        attendanceCheckService.parseCrewFromCsv(crews);
 
         // 오늘 날짜 출력
         outputView.printToday();
