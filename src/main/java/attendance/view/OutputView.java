@@ -1,7 +1,6 @@
 package attendance.view;
 
 import attendance.model.Attendance;
-import attendance.model.Attendances;
 import attendance.model.ExpelStatus;
 import attendance.model.ExpelTarget;
 import camp.nextstep.edu.missionutils.DateTimes;
@@ -103,7 +102,7 @@ public class OutputView {
                 .toList();
 
         for (ExpelTarget target : realExpelTarget) {
-            System.out.printf("- %s: 결석 %d회, 지각 %d회 (제적)", target.getNickName(), target.getAbsenceCount(), target.getLateCount());
+            System.out.printf("- %s: 결석 %d회, 지각 %d회 (제적)\n", target.getNickName(), target.getAbsenceCount(), target.getLateCount());
         }
 
         List<ExpelTarget> interviewTarget = expelTargets.stream()
@@ -112,7 +111,7 @@ public class OutputView {
                 .toList();
 
         for (ExpelTarget target : interviewTarget) {
-            System.out.printf("- %s: 결석 %d회, 지각 %d회 (면담)", target.getNickName(), target.getAbsenceCount(), target.getLateCount());
+            System.out.printf("- %s: 결석 %d회, 지각 %d회 (면담)\n", target.getNickName(), target.getAbsenceCount(), target.getLateCount());
         }
 
         List<ExpelTarget> warningTarget = expelTargets.stream()
@@ -121,7 +120,7 @@ public class OutputView {
                 .toList();
 
         for (ExpelTarget target : warningTarget) {
-            System.out.printf("- %s: 결석 %d회, 지각 %d회 (경고)", target.getNickName(), target.getAbsenceCount(), target.getLateCount());
+            System.out.printf("- %s: 결석 %d회, 지각 %d회 (경고)\n", target.getNickName(), target.getAbsenceCount(), target.getLateCount());
         }
 
         System.out.println();

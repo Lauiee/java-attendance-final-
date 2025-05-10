@@ -1,7 +1,6 @@
 package attendance.service;
 
 import attendance.model.Attendance;
-import attendance.model.Attendances;
 import attendance.model.Crew;
 import attendance.model.Crews;
 import java.util.ArrayList;
