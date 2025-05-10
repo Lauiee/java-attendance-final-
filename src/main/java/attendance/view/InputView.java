@@ -50,7 +50,7 @@ public class InputView {
 
     public String inputAttendanceTime(){
         System.out.println("등교 시간을 입력해 주세요.");
-        return Console.readLine();
+        return validateTime(Console.readLine());
     }
 
     public String inputUpdateCrewNickName(){
@@ -60,7 +60,14 @@ public class InputView {
 
     public String inputUpdateDay(){
         System.out.println("수정하려는 날짜(일)을 입력해 주세요.");
-        return validateTime(Console.readLine());
+        return validateFuture(Console.readLine());
+    }
+
+    private String validateFuture(String input){
+        if (Integer.parseInt(input) > DateTimes.now().getDayOfMonth()){
+            throw new IllegalArgumentException("[ERROR] 아직 수정할 수 없습니다.");
+        }
+        return input;
     }
 
     public String inputUpdateTime(){
@@ -70,6 +77,20 @@ public class InputView {
 
     private String validateTime(String input){
         validateDelimiter(input);
+        if (input.length() != 5){ // xx:xx 로 총 5개의 문자만이 입력됨
+            throw new IllegalArgumentException("[ERROR] 잘못된 형식을 입력하였습니다.");
+        }
+        String[] timeSplit = input.split(":");
+        int hour = Integer.parseInt(timeSplit[0]);
+        int min = Integer.parseInt(timeSplit[1]);
+
+        if (hour <= 8 || hour >= 23){  // 캠퍼스 운영시간 내로만 입력 가능
+            if ((hour == 8 || hour == 23) && min == 0){
+                return input;
+            }
+            throw new IllegalArgumentException("[ERROR] 잘못된 형식을 입력하였습니다.");
+        }
+
         return input;
     }
 
