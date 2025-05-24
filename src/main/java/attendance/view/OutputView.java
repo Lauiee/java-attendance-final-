@@ -1,7 +1,6 @@
 package attendance.view;
 
 import attendance.model.Attendance;
-import attendance.model.ExpelStatus;
 import attendance.model.ExpelTarget;
 import camp.nextstep.edu.missionutils.DateTimes;
 import java.time.LocalDateTime;
@@ -97,7 +96,7 @@ public class OutputView {
                 .thenComparing(ExpelTarget::getNickName);
 
         List<ExpelTarget> realExpelTarget = expelTargets.stream()
-                .filter(expelTarget -> expelTarget.getExpelStatus()==ExpelStatus.EXPEL)
+                .filter(expelTarget -> expelTarget.getExpelStatus().equals("제적"))
                 .sorted(expelTargetComparator)
                 .toList();
 
@@ -106,7 +105,7 @@ public class OutputView {
         }
 
         List<ExpelTarget> interviewTarget = expelTargets.stream()
-                .filter(expelTarget -> expelTarget.getExpelStatus()==ExpelStatus.INTERVIEW)
+                .filter(expelTarget -> expelTarget.getExpelStatus().equals("인터뷰"))
                 .sorted(expelTargetComparator)
                 .toList();
 
@@ -115,7 +114,7 @@ public class OutputView {
         }
 
         List<ExpelTarget> warningTarget = expelTargets.stream()
-                .filter(expelTarget -> expelTarget.getExpelStatus()==ExpelStatus.WARNING)
+                .filter(expelTarget -> expelTarget.getExpelStatus().equals("경고"))
                 .sorted(expelTargetComparator)
                 .toList();
 

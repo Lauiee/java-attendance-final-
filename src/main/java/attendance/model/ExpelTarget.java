@@ -5,12 +5,23 @@ import java.util.List;
 
 public class ExpelTarget {
 
+    private static final int EXPEL_LIMIT = 5;
+    private static final int INTERVIEW_LIMIT = 3;
+    private static final int WARNING_LIMIT = 2;
+    private static final int LATE_TO_ABSENT = 3;
+
+    public static final String ATTENDANCE = "출석";
+    public static final String LATE = "지각";
+    public static final String EXPEL = "제적";
+    public static final String INTERVIEW = "인터뷰";
+    public static final String WARNING = "경고";
+
     private final String nickName;
     private final int absenceCount;
     private final int lateCount;
-    private final ExpelStatus expelStatus;
+    private final String expelStatus;
 
-    public ExpelTarget(String nickName, int absenceCount, int lateCount, ExpelStatus expelStatus) {
+    public ExpelTarget(String nickName, int absenceCount, int lateCount, String expelStatus) {
         this.nickName = nickName;
         this.absenceCount = absenceCount;
         this.lateCount = lateCount;
@@ -23,7 +34,7 @@ public class ExpelTarget {
 
         for (Crew crew : crews.getCrews()) {
             ExpelTarget expelTarget = isExpelTarget(crew);
-            if (expelTarget != null){
+            if (expelTarget!=null) {
                 expelTargets.add(expelTarget);
             }
         }
@@ -39,21 +50,21 @@ public class ExpelTarget {
 
         for (Attendance attendance : attendances) {
             String result = attendance.getAttendanceResult();
-            if ("출석".equals(result)) {
+            if (ATTENDANCE.equals(result)) {
                 continue;
             }
-            if ("지각".equals(result)) {
+            if (LATE.equals(result)) {
                 lateCount++;
                 continue;
             }
             absenceCount++;
         }
 
-        int absenceTotal = (lateCount / 3) + absenceCount;
+        int absenceTotal = (lateCount / LATE_TO_ABSENT) + absenceCount;
 
-        if (absenceTotal > 5) return new ExpelTarget(crew.getNickName(), absenceCount, lateCount, ExpelStatus.EXPEL);
-        if (absenceTotal >= 3) return new ExpelTarget(crew.getNickName(), absenceCount, lateCount, ExpelStatus.INTERVIEW);
-        if (absenceTotal >= 2) return new ExpelTarget(crew.getNickName(), absenceCount, lateCount, ExpelStatus.WARNING);
+        if (absenceTotal > EXPEL_LIMIT) return new ExpelTarget(crew.getNickName(), absenceCount, lateCount, EXPEL);
+        if (absenceTotal >= INTERVIEW_LIMIT) return new ExpelTarget(crew.getNickName(), absenceCount, lateCount, INTERVIEW);
+        if (absenceTotal >= WARNING_LIMIT) return new ExpelTarget(crew.getNickName(), absenceCount, lateCount, WARNING);
 
         return null;
     }
@@ -70,7 +81,7 @@ public class ExpelTarget {
         return lateCount;
     }
 
-    public ExpelStatus getExpelStatus() {
+    public String getExpelStatus() {
         return expelStatus;
     }
 }
