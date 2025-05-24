@@ -2,8 +2,6 @@ package attendance.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class Crews {
 
@@ -15,11 +13,16 @@ public class Crews {
                 .toList();
     }
 
-    public Crew isCrewIn(String nickName){
+    public Crew getCrewIfExist(String nickName){
         for (Crew crew : crews) {
             if (crew.isYourNickName(nickName)) return crew;
         }
-        return null;
+        throw new IllegalArgumentException("[ERROR] 등록되지 않은 닉네임입니다.");
+    }
+
+    public List<Attendance> checkCrewAttendances(String inputNickName) {
+        Crew findCrew = this.getCrewIfExist(inputNickName);
+        return findCrew.getAttendances();
     }
 
     public void addCrew(Crew crew){

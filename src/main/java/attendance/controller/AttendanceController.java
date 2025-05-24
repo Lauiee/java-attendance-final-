@@ -4,10 +4,7 @@ import attendance.model.Attendance;
 import attendance.model.Crew;
 import attendance.model.Crews;
 import attendance.model.ExpelTarget;
-import attendance.service.AttendanceCheckService;
-import attendance.service.AttendanceUpdateService;
-import attendance.service.ExpelDangerCheckService;
-import attendance.service.PersonalAttendanceCheckService;
+import attendance.parser.CSVParser;
 import attendance.view.InputView;
 import attendance.view.OutputView;
 import java.util.List;
@@ -16,30 +13,17 @@ public class AttendanceController {
 
     private final InputView inputView;
     private final OutputView outputView;
-    private final AttendanceCheckService attendanceCheckService;
-    private final AttendanceUpdateService attendanceUpdateService;
-    private final ExpelDangerCheckService expelDangerCheckService;
-    private final PersonalAttendanceCheckService personalAttendanceCheckService;
 
-    public AttendanceController(
-            InputView inputView, OutputView outputView,
-            AttendanceCheckService attendanceCheckService,
-            AttendanceUpdateService attendanceUpdateService,
-            ExpelDangerCheckService expelDangerCheckService,
-            PersonalAttendanceCheckService personalAttendanceCheckService) {
+    public AttendanceController(InputView inputView, OutputView outputView) {
         this.inputView = inputView;
         this.outputView = outputView;
-        this.attendanceCheckService = attendanceCheckService;
-        this.attendanceUpdateService = attendanceUpdateService;
-        this.expelDangerCheckService = expelDangerCheckService;
-        this.personalAttendanceCheckService = personalAttendanceCheckService;
     }
 
     public void run() {
 
         // csv파일 읽어 미리 Crews 생성
         Crews crews = new Crews();
-        attendanceCheckService.parseCrewFromCsv(crews);
+        CSVParser.parseCrewFromCsv(crews);
 
         // 오늘 날짜 출력
         outputView.printToday();
@@ -72,11 +56,11 @@ public class AttendanceController {
 
         // 닉네임 입력, 현존하는 크루원인지 확인 후 없던 크루원이면 새로 생성
         String inputNickName = inputView.inputNickNameToAttendance();
-        Crew attendanceCrew = attendanceCheckService.findOrCreateCrew(crews, inputNickName);
+        Crew attendanceCrew = crews.getCrewIfExist(inputNickName);
 
         // 출석 시간 입력
         String attendanceTime = inputView.inputAttendanceTime();
-        Attendance newAttendance = attendanceCheckService.checkAttendance(attendanceCrew, attendanceTime);
+        Attendance newAttendance = Attendance.checkAttendance(attendanceCrew, attendanceTime);
 
         // 출석 기록 출력
         outputView.printAttendance(newAttendance);
@@ -86,34 +70,32 @@ public class AttendanceController {
 
         // 수정 대상의 닉네임 입력 및 해당 닉네임을 가진 크루 탐색
         String updateCrewNickName = inputView.inputUpdateCrewNickName();
-        Crew targetCrew = attendanceUpdateService.findCrewByNickName(crews, updateCrewNickName);
+        Crew targetCrew = crews.getCrewIfExist(updateCrewNickName);
 
         // 수정 대상 날짜(일) 입력
         int updateDay = Integer.parseInt(inputView.inputUpdateDay());
         // 수정 대상 기록 탐색
-        Attendance targetAttendance = attendanceUpdateService.findAttendance(targetCrew, updateDay);
+        Attendance targetAttendance = Attendance.findAttendance(targetCrew, updateDay);
 
         // 수정 시간 입력
         String updateTime = inputView.inputUpdateTime();
         // 수정 진행
-        Attendance updatedAttendance = attendanceUpdateService.updateAttendance(targetCrew, targetAttendance, updateTime);
+        Attendance updatedAttendance = Attendance.updateAttendance(targetCrew, targetAttendance, updateTime);
 
         // 수정 결과 출력
         outputView.printUpdateResult(targetAttendance, updatedAttendance);
-
-
     }
 
     private void personalAttendancesCheck(Crews crews) {
         String inputNickName = inputView.inputNickName();
 
-        List<Attendance> attendances = personalAttendanceCheckService.checkCrewAttendances(crews, inputNickName);
+        List<Attendance> attendances = crews.checkCrewAttendances(inputNickName);
 
         outputView.printCheck(attendances, inputNickName);
     }
 
     private void expelDangerCheck(Crews crews) {
-        List<ExpelTarget> expelTargets = expelDangerCheckService.findExpelTargets(crews);
+        List<ExpelTarget> expelTargets = ExpelTarget.findExpelTargets(crews);
         outputView.printExpelTargets(expelTargets);
     }
 }
