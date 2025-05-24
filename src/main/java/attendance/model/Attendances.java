@@ -18,7 +18,7 @@ public class Attendances {
 
     public List<Attendance> getAttendances() {
         return attendances.stream()
-                .map(attendance -> new Attendance(attendance))
+                .map(Attendance::copyOf)
                 .toList();
     }
 
@@ -38,7 +38,7 @@ public class Attendances {
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("[ERROR] 수정 대상 출석 기록을 찾을 수 없습니다."));
 
-        return new Attendance(findAttendance);
+        return Attendance.copyOf(findAttendance);
     }
 
     public Attendance updateAttendance(Attendance targetAttendance, String updateTime){
@@ -46,9 +46,9 @@ public class Attendances {
         attendances.removeIf(a -> a.getCrewNickName().equals(targetAttendance.getCrewNickName()) && a.getDay() ==targetAttendance.getDay());
 
         // 새로운 수정된 기록 생성
-        Attendance newAttendance = new Attendance(targetAttendance, updateTime);
+        Attendance newAttendance = Attendance.createUpdatedAttendance(targetAttendance, updateTime);
         addAttendance(newAttendance);
 
-        return new Attendance(newAttendance);
+        return Attendance.copyOf(newAttendance);
     }
 }

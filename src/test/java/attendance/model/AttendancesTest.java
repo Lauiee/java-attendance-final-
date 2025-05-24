@@ -13,7 +13,7 @@ class AttendancesTest {
     @Test
     void 특정_기록_탐색(){
         Attendances attendances = new Attendances(new ArrayList<>());
-        attendances.addAttendance(new Attendance("test", "13:10"));
+        attendances.addAttendance(Attendance.createCurrentAttendance("test", "13:10"));
 
         Attendance findAttendance = attendances.findAttendance("test", 5);
 
@@ -24,7 +24,7 @@ class AttendancesTest {
     @Test
     void 전체_기록_탐색(){
         Attendances attendances = new Attendances(new ArrayList<>());
-        attendances.addAttendance(new Attendance("test", "13:10"));
+        attendances.addAttendance(Attendance.createCurrentAttendance("test", "13:10"));
 
         List<Attendance> attendanceList = attendances.getAttendances();
 

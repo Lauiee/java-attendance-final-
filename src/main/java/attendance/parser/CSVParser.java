@@ -38,7 +38,7 @@ public class CSVParser {
         String[] recordSplit = record.split(" ");
         String attendanceDate = recordSplit[0];
         String attendanceTime = recordSplit[1];
-        return new Attendance(crewNickName, attendanceDate, attendanceTime);
+        return Attendance.createPastAttendance(crewNickName, attendanceDate, attendanceTime);
     }
 
     private static void parseRecordsFromCsv(String filePath, Map<String, List<String>> records) throws FileNotFoundException {

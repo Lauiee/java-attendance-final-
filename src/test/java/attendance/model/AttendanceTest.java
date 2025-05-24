@@ -11,7 +11,7 @@ class AttendanceTest {
     @Test
     void 출석_기록_생성(){
 
-        Attendance test = new Attendance("test", "11:10");
+        Attendance test = Attendance.createCurrentAttendance("test", "11:10");
 
         System.out.println(test.toString());
 
